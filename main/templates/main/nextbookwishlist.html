@@ -1,0 +1,213 @@
+{% extends "main/layout.html" %}
+<!DOCTYPE html> {% load static %} {% load mathfilters %} {% block content %}
+
+<section>
+
+    <div class="container">
+        <div class="category-tab">
+            <!--category-tab-->
+            <div class="col-sm-12">
+                <ul class="nav nav-tabs">
+                    <li id="bookmenu1">
+                        <a href="" onclick="f_gobookmenu(1)" data-toggle="tab">읽은책</a>
+                    </li>
+                    <li id="bookmenu3">
+                        <a href="" onclick="f_gobookmenu(3)" data-toggle="tab">읽는책</a>
+                    </li>
+                    <li id="bookmenu2" class="active">
+                        <a href="" onclick="f_gobookmenu(2)" data-toggle="tab">읽을책</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="left-sidebar">
+                <div class="panel-group category-products" id="accordian">
+                    <!--category-productsr-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a href="/nextbook/">검색하기</a>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a href="/wishlist/">등록된 책</a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <!--/category-products-->
+            </div>
+        </div>
+
+        <div class="col-sm-9 padding-right">
+            <div class="features_items">
+                <h2 class="title text-center">Book</h2>
+            </div>
+
+            {% for ourbook in wishbook %}
+            
+            <div class="col-sm-3" style="margin-top:30px;">
+                <div class="product-image-wrapper">
+                    <div class="single-products">
+                        <div class="productinfo">
+                            <a href="#" onclick="f_modalDisplay('{{ ourbook.bookId }}', '{{ ourbook.imgindex }}', '{{ ourbook.wishbooktitle }}'
+                            , '{{ ourbook.register }}', '{{ ourbook.reason }}', '{{ ourbook.imgAlt }}')">
+                                <img src="http://image.kyobobook.co.kr/images/book/large/{{ ourbook.imgindex }}/l{{ ourbook.bookId }}.jpg"
+                                 onerror="this.src='{{ ourbook.imgAlt }}'" /></a>
+                        </div>
+                        {% if ourbook.total_likes == 0 %}
+                        <a class="like" onmouseover="setCursor(this,'pointer');" onclick="f_like('{{ourbook.bookId}}')" id="{{ ourbook.bookId }}"><img id = "like-img{{ ourbook.bookId }}" src="{% static 'images\home\like_before.png' %}" alt="클릭시 좋아요"></a>
+                        <span class= "like_count" id="count{{ ourbook.bookId }}"></span>
+                        {% elif ourbook.total_likes == 1%}
+                        <a class="like" onmouseover="setCursor(this,'pointer');" onclick="f_like('{{ourbook.bookId}}')" id="{{ ourbook.bookId }}"><img id = "like-img{{ ourbook.bookId }}" src="{% static 'images\home\like_after.png' %}" alt="클릭시 좋아요 취소"></a>
+                        <span class= "like_count" id="count{{ ourbook.bookId }}">{{ ourbook.total_likes}} like</span>
+                        {% else %}
+                        <a class="like" onmouseover="setCursor(this,'pointer');" onclick="f_like('{{ourbook.bookId}}')" id="{{ ourbook.bookId }}"><img id = "like-img{{ ourbook.bookId }}" src="{% static 'images\home\like_after.png' %}" alt="클릭시 좋아요 취소"></a>
+                        <span class= "like_count" id="count{{ ourbook.bookId }}">{{ ourbook.total_likes}} likes</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+                    <!-- The Modal -->
+                    <div id="myModal" class="modal">
+                            <!-- Modal content -->
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>                                                               
+                                    <div class="col-sm-5">
+                                            <div class="modalWishbook" >
+                                                    <img id="modalImage" src="" alt="" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <div id="modalcontent" class="product-information">
+                                                <!--/product-information-->
+                                                <h2 id="modaltitle"></h2>
+                                                <p id="modalISBN"></p>
+                                                <p id="modalAuthor"></p>
+                                                <p id="modalpublisher"></p>
+                                                <p style="margin-top:10px;" ><발제 이유></p>
+                                                <p id="modaldiscuss"></p>
+                                                <button type="button" id="modalclose" style="float:right;"
+                                                class="btn btn-default get">닫기</button>
+                                                
+                                                <button type="button" id="modalregistdelete" style="float:right; margin-right: 10px;display:none;"
+                                                class="btn btn-default get">등록취소</button>
+                                                
+                                            </div>
+                                            <!--/product-information-->
+                                        </div>
+                                </div>
+                            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function f_gobookmenu(menuid) {
+        if (menuid == 1) {
+            location.href = "/book/";
+        } else if (menuid == 2) {
+            location.href = "/nextbook/";
+        } else {
+            location.href = "/nowbook/";
+        }
+    }
+
+    function setCursor(str,str2){
+        str.style.cursor = str2;
+    }
+
+    function f_searchnextbook(){
+        var searchKey = document.getElementById('searchKey').value;
+
+        if (searchKey == null || searchKey.trim() == ''){
+            alert("검색어를 입력해주세요!");
+            return false;
+        }
+
+        location.href="/nextbooksearch?searchKey="+searchKey;
+        return false;
+    }
+
+
+
+
+    var regiIsbn = '';
+    var regiTitle = '';
+    var span = document.getElementsByClassName("close")[0];
+    var modal = document.getElementById('myModal');
+    var modalclose = document.getElementById('modalclose');
+    var modalregist = document.getElementById('modalregist');
+
+    // When the user clicks on the button, open the modal 
+    function f_modalDisplay(isbn, imgIndex, title, register, reason, imgAlt) {
+
+        if( '{{user.username}}' == register ){
+            document.getElementById('modalregistdelete').style.display='block';
+        }
+
+        var imgAddress="http://image.kyobobook.co.kr/images/book/large/"+imgIndex+"/l"+isbn+".jpg";
+        document.getElementById("modalImage").src = imgAddress;
+        document.getElementById("modaltitle").innerHTML = title;
+        document.getElementById("modalISBN").innerHTML = "ISBN : "+isbn;
+        document.getElementById("modalAuthor").innerHTML = "등록자 : "+register;
+        document.getElementById("modaldiscuss").innerHTML = reason;
+        regiIsbn = isbn;
+        regiTitle = title;
+        modal.style.display = "block";
+    }
+ 
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    modalclose.onclick = function(){
+        document.getElementById('modalregistdelete').style.display='none';
+        modal.style.display = "none";
+    }
+    modalregistdelete.onclick = function(){
+        if(confirm("등록을 취소하시겠습니까?")){
+            location.href="/wishbookdelete?bookId="+regiIsbn;
+        }
+    }
+
+
+
+     function f_like(bookId){
+        $.ajax({
+            type: "POST",
+            url: "{% url 'like' %}", 
+            data: {'pk': bookId, 'csrfmiddlewaretoken': '{{ csrf_token }}'}, 
+            dataType: "json", 
+            success: function(response){ // 성공했을 때 호출할 콜백을 지정한다.
+
+            if(response.likes_count == 1){
+                $('#count'+ bookId).html(response.likes_count + ' like ');
+                $('#like-img'+bookId).attr('src',"{% static 'images\home\like_after.png' %}");
+            }else if(response.likes_count == 0){
+                $('#count'+ bookId).html('');
+                $('#like-img'+bookId).attr('src',"{% static 'images\home\like_before.png' %}");
+            }else{
+                $('#count'+ bookId).html(response.likes_count + ' likes');
+                $('#like-img'+bookId).attr('src',"{% static 'images\home\like_after.png' %}");
+            }
+            alert(response.message);
+        
+            },
+            error:function(request,status,error){
+            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+
+
+
+
+</script> {% endblock %}

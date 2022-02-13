@@ -1,0 +1,109 @@
+<!DOCTYPE html>  {% load static %}
+<html lang="en">
+
+    <style>
+        body 
+        {
+        background: url("{% static 'images/home/menu.jpg' %}") no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        }
+        #menuMain{
+            margin-top: 14%;
+            width: 85%;
+            font-weight: bold;
+            float: right;
+        }
+        #readingmeetingarea{
+            width: 34%;
+            float: left;
+            margin-top: 24%;
+            font-weight: bold;
+        }
+        #menuarea{
+            width: 66%;
+            float:right;
+            font-weight: bold;
+            background-color: #ffffff;
+            opacity: 0.5;
+        }
+        #coffeeAndCocktail{
+            margin-left: 6%;
+            margin-right: 8%;
+            margin-bottom: 15px;
+            float: left;
+        }
+        .weekreading{
+            
+            float: left;
+            margin-top: 20px;
+            margin-right: 20px;
+            width: 130px;
+        }
+        .imgweeks{
+            width: 130px;
+            height: 180px;
+        }
+    </style>
+
+        
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<!--/head-->
+<body>
+<div id="menuMain">
+<div id="readingmeetingarea">
+    {% for ourbook in weekbooks %}
+    <div class="weekreading" >
+        <img class="imgweeks" src="http://image.kyobobook.co.kr/images/book/large/{{ ourbook.imgindex }}/l{{ ourbook.bookId }}.jpg"/>
+        <span><center>{{ ourbook.meeingdate }} {{ ourbook.meeingtime }}</center></span>
+    </div>
+    {% endfor %}
+</div>    
+<div id="menuarea">
+    <table id="coffeeAndCocktail">
+        <tr><td><h1 style="margin-bottom:3px;margin-top:3px;"><FONT face="Papyrus">COFFEE</h1></td></tr>
+        {% for coffee in coffeeMenu %}
+        <tr>
+            <td>{{ coffee.korname }}/<span style="margin-right:5px;">{{ coffee.engname }}</span> <img src="{% static 'images/home/new.gif' %}"/></td>
+            <td><span style="margin-left:40px;">{{ coffee.price }}</span></td>
+        </tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
+        {% endfor %}
+        <tr><td><h1 style="margin-bottom:3px;margin-top:20px;"><FONT face="Papyrus">COCKTAIL</h1></td></tr>
+        {% for cocktail in cocktailMenu %}
+        <tr>
+            <td>{{ cocktail.korname }}/<span>{{ cocktail.engname }}</span></td>
+            <td><span style="margin-left:40px;">{{ cocktail.price }}</span></td>
+        </tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
+        {% endfor %}
+    </table>
+    <table id="beverageAndsidemenu">
+            <tr><td><h1 style="margin-bottom:3px;margin-top:3px;"><FONT face="Papyrus">BEVERAGE</h1></td></tr>
+            {% for beverage in beverageMenu %}
+            <tr>
+                <td>{{ beverage.korname }}/<span>{{ beverage.engname }}</span></td>
+                <td><span style="margin-left:40px;">{{ beverage.price }}</span></td>
+            </tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
+            {% endfor %}
+            <tr><td><h1 style="margin-bottom:3px;margin-top:20px;"><FONT face="Papyrus">SIDEMENU</h1></td></tr>
+            {% for side in sideMenu %}
+            <tr>
+                <td>{{ side.korname }}/<span>{{ side.engname }}</span></td>
+                <td><span style="margin-left:40px;">{{ side.price }}</span></td>
+            </tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
+            {% endfor %}
+    </table>
+</div>
+</div>
+
+
+
+
+</body>
+
+</html>
